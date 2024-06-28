@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import TmTable from '$lib/tm_table.svelte';
 	import { API } from '$lib/api_server';
@@ -13,7 +14,6 @@
 		APIDecisionStatusToTMDecisionStatus
 	} from '$lib/tm';
 	import { BB5_champion, Skelet_machines } from '$lib/machine_repertoire';
-
 	import DecidersAndZoology from '$lib/deciders-and-zoology.svelte';
 	import Highlights from '$lib/highlights.svelte';
 	import News from '$lib/news.svelte';
@@ -130,7 +130,7 @@
 				machineCode = response.data['machine_code'];
 				machineID = response.data['machine_id'];
 				machineDecider = null;
-				window.history.pushState({}, '', getSimulationLink());
+				await goto(getSimulationLink());
 				if (response.data['status'] !== undefined) {
 					machineStatus = APIDecisionStatusToTMDecisionStatus(response.data['status']);
 					if (
@@ -161,7 +161,7 @@
 			machineID = null;
 			machine = machineCodeToTM(machine_code);
 			machineCode = machine_code;
-			window.history.pushState({}, '', getSimulationLink());
+			await goto(getSimulationLink());
 		}
 	}
 
@@ -195,7 +195,7 @@
 				}
 			}
 
-			window.history.pushState({}, '', getSimulationLink());
+			await goto(getSimulationLink());
 
 			console.log(machine, machineID);
 		} catch (error) {
@@ -216,7 +216,7 @@
 			machineCodeError = null;
 			machineCode = machine_code;
 			machine = machineCodeToTM(machine_code);
-			window.history.pushState({}, '', getSimulationLink());
+			void goto(getSimulationLink());
 		} catch (error) {
 			machineCodeError = error;
 		}
@@ -408,9 +408,7 @@
 											class="w-[70px] text-black"
 											type="number"
 											bind:value={nbIter}
-											on:change={() => {
-												window.history.pushState({}, '', getSimulationLink());
-											}}
+											on:change={() => goto(getSimulationLink())}
 											min="1"
 											max="99999"
 											on:blur={(e) => {
@@ -425,9 +423,7 @@
 											class="w-[70px] text-black"
 											type="number"
 											bind:value={tapeWidth}
-											on:change={() => {
-												window.history.pushState({}, '', getSimulationLink());
-											}}
+											on:change={() => goto(getSimulationLink())}
 										/></label
 									>
 									<label class="flex flex-col">
@@ -436,9 +432,7 @@
 											class="w-[70px] text-black"
 											type="number"
 											bind:value={origin_x}
-											on:change={() => {
-												window.history.pushState({}, '', getSimulationLink());
-											}}
+											on:change={() => goto(getSimulationLink())}
 											min="0"
 											max="1"
 											step="0.1"
